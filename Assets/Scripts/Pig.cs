@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class Pig : MonoBehaviour {
     [SerializeField] private Transform pigTransform = default;
     [SerializeField] private List<GameObject> pigsImages = default;
 
-    private int _pigHP;
+    private int _pigHp;
     private Vector3 _pigPosition;
     private bool _isRight;
     private bool _isLeft;
@@ -16,12 +15,12 @@ public class Pig : MonoBehaviour {
     private bool _isDown;
     
     // Properties
-    public int PigHP => _pigHP;
+    public int PigHP => _pigHp;
     public Vector3 PigPosition => _pigPosition;
 
     // Lifecycles
     private void Awake() {
-        _pigHP = gameSettings.PigHealth;
+        _pigHp = gameSettings.PigHealth;
         _pigPosition = pigTransform.position;
         ActivateImage(0);
     }
@@ -44,11 +43,11 @@ public class Pig : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        /*if (other.gameObject.TryGetComponent<AbstractEnemy>(out var abstractEnemy)) {
+        if (other.gameObject.TryGetComponent<AbstractEnemy>(out var abstractEnemy)) {
             if (abstractEnemy.CanDamage()) {
-                _pigHP -= gameSettings.EnemyDamage;
+                _pigHp -= gameSettings.EnemyDamage;
             }
-        }*/
+        }
     }
 
     private void OnEnable() {
@@ -73,6 +72,11 @@ public class Pig : MonoBehaviour {
         UIScreenHud.OnLeftButtonUp -= GameScreen_OnLeftButtonUp;
         UIScreenHud.OnUpButtonUp -= GameScreen_OnUpButtonUp;
         UIScreenHud.OnDownButtonUp -= GameScreen_OnDownButtonUp;
+    }
+    
+    // Public
+    public void PigDamage() {
+        _pigHp -= gameSettings.BombDamage;
     }
 
     // Private
@@ -114,7 +118,7 @@ public class Pig : MonoBehaviour {
 
     // Handlers
     private void PigDeath() {
-        if (_pigHP <= 0) {
+        if (_pigHp <= 0) {
             gameObject.SetActive(false);
         }
     }

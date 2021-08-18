@@ -6,13 +6,12 @@ public class UIScreenHud : AbstractScreen {
     public static event System.Action OnLeftButtonDown;
     public static event System.Action OnUpButtonDown;
     public static event System.Action OnDownButtonDown;
-    public static event System.Action OnBombButtonDown;
-    
+
     public static event System.Action OnRightButtonUp;
     public static event System.Action OnLeftButtonUp;
     public static event System.Action OnUpButtonUp;
     public static event System.Action OnDownButtonUp;
-    public static event System.Action OnBombButtonUp;
+    public static event System.Action OnBombButtonClick;
 
     // Variables
     [SerializeField] private UIButton rightButton = default;
@@ -23,65 +22,67 @@ public class UIScreenHud : AbstractScreen {
 
     // Lifecycles
     private void OnEnable() {
-        rightButton.OnDown += RightButton_OnButtonDown;
-        leftButton.OnDown += LeftButton_OnButtonDown;
-        upButton.OnDown += UpButton_OnButtonDown;
-        downButton.OnDown += DownButton_OnButtonDown;
-        bombButton.OnDown += BombButton_OnButtonDown;
+        rightButton.OnDown += RightButton_OnDown;
+        leftButton.OnDown += LeftButton_OnDown;
+        upButton.OnDown += UpButton_OnDown;
+        downButton.OnDown += DownButton_OnDown;
+
+        rightButton.OnUp += RightButton_OnUp;
+        leftButton.OnUp += LeftButton_OnUp;
+        upButton.OnUp += UpButton_OnUp;
+        downButton.OnUp += DownButton_OnUp;
         
-        rightButton.OnUp += RightButton_OnButtonUp;
-        leftButton.OnUp += LeftButton_OnButtonUp;
-        upButton.OnUp += UpButton_OnButtonUp;
-        downButton.OnUp += DownButton_OnButtonUp;
-        bombButton.OnUp += BombButton_OnButtonUp;
+        bombButton.OnClick += BombButton_OnClick;
     }
 
     private void OnDisable() {
-        rightButton.OnUp -= RightButton_OnButtonUp;
-        leftButton.OnUp -= LeftButton_OnButtonUp;
-        upButton.OnUp -= UpButton_OnButtonUp;
-        downButton.OnUp -= DownButton_OnButtonUp;
-        bombButton.OnUp -= BombButton_OnButtonUp;
+        rightButton.OnDown -= RightButton_OnDown;
+        leftButton.OnDown -= LeftButton_OnDown;
+        upButton.OnDown -= UpButton_OnDown;
+        downButton.OnDown -= DownButton_OnDown;
+        
+        rightButton.OnUp -= RightButton_OnUp;
+        leftButton.OnUp -= LeftButton_OnUp;
+        upButton.OnUp -= UpButton_OnUp;
+        downButton.OnUp -= DownButton_OnUp;
+        
+        bombButton.OnClick -= BombButton_OnClick;
     }
     
     // Private
-    private void RightButton_OnButtonDown() {
+    private void RightButton_OnDown() {
         OnRightButtonDown?.Invoke();
     }
 
-    private void LeftButton_OnButtonDown() {
+    private void LeftButton_OnDown() {
         OnLeftButtonDown?.Invoke();
     }
 
-    private void UpButton_OnButtonDown() {
+    private void UpButton_OnDown() {
         OnUpButtonDown?.Invoke();
     }
 
-    private void DownButton_OnButtonDown() {
+    private void DownButton_OnDown() {
         OnDownButtonDown?.Invoke();
     }
-
-    private void BombButton_OnButtonDown() {
-        OnBombButtonDown?.Invoke();
-    }
     
-    private void RightButton_OnButtonUp() {
+    private void RightButton_OnUp() {
         OnRightButtonUp?.Invoke();
     }
     
-    private void LeftButton_OnButtonUp() {
+    private void LeftButton_OnUp() {
         OnLeftButtonUp?.Invoke();
     }
     
-    private void UpButton_OnButtonUp() {
+    private void UpButton_OnUp() {
         OnUpButtonUp?.Invoke();
     }
     
-    private void DownButton_OnButtonUp() {
+    private void DownButton_OnUp() {
         OnDownButtonUp?.Invoke();
     }
     
-    private void BombButton_OnButtonUp() {
-        OnBombButtonUp?.Invoke();
+    private void BombButton_OnClick() {
+        OnBombButtonClick?.Invoke();
     }
 }

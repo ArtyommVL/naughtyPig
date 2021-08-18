@@ -20,9 +20,9 @@ public abstract class AbstractEnemy : MonoBehaviour {
     private Pig _pig;
     private AILerp _aiLerp;
     private AIDestinationSetter _aiDestinationSetter;
-
-    private bool _isPatrol;
+    
     private bool _isChase;
+    private bool _isPatrol;
     private bool _isDirty;
     private bool _isAlive;
 
@@ -74,11 +74,11 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
     protected virtual void EnemyChase() {
         if (Vector2.Distance(transform.position, _pig.transform.position) < gameSettings.StartChasingRadius) { 
-            _aiDestinationSetter.target = _pig.transform;
+            EnemyTarget();
         }else { 
-            _aiDestinationSetter.target = waypoints[_waypointIndex].transform; 
             _isChase = false; 
             _isPatrol = true;
+            _aiDestinationSetter.target = waypoints[_waypointIndex].transform;
         }
     }
 
@@ -162,6 +162,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
         _timer += Time.deltaTime;
         if (_timer >= gameSettings.DirtyTime) {
             EnemyDeath();
+            _aiLerp.canMove = true;
             _isDirty = false;
             _timer = 0;
         }
@@ -173,6 +174,10 @@ public abstract class AbstractEnemy : MonoBehaviour {
         }
     }
 
+    protected virtual void EnemyTarget() {
+        _aiDestinationSetter.target = _pig.transform;
+    }
+    
     public virtual void EnemyDamage() {
         _enemyHealthPoint -= gameSettings.BombDamage;
         _aiLerp.canMove = false;

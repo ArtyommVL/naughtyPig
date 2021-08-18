@@ -14,3 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pigHealth: 100
   pigSpeed: 0.1
+  enemyHealth: 200
+  enemyDamage: 50
+  startChasingRadius: 4
+  dirtyTime: 3
+  bombDamage: 100
+  pushTime: 2
+  attackTime: 3

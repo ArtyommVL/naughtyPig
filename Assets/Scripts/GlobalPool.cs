@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GlobalPool : MonoBehaviour {
-    /*// Variables
+public class GlobalPool : MonoBehaviour {
+    // Variables
     [SerializeField] private int poolSize = 10;
     [SerializeField] private Transform poolParent = default;
-    [SerializeField] private List<AbstractPart> abstractParts = default;
+    [SerializeField] private List<Bomb> abstractParts = default;
 
-    private readonly List<AbstractPart> _enableCache = new List<AbstractPart>(1000);
-    private readonly List<AbstractPart> _disableCache = new List<AbstractPart>(1000);
+    private readonly List<Bomb> _enableCache = new List<Bomb>(1000);
+    private readonly List<Bomb> _disableCache = new List<Bomb>(1000);
     
     // Singleton
     private static GlobalPool _instance;
@@ -35,7 +35,7 @@ public abstract class GlobalPool : MonoBehaviour {
     }
     
     // Public
-    public T Pop<T>() where T : AbstractPart {
+    public T Pop<T>() where T : Bomb {
         for (int i = 0; i < _disableCache.Count; i++) {
             if (_disableCache[i] is T) {
                 var currentPart = _disableCache[i];
@@ -55,9 +55,9 @@ public abstract class GlobalPool : MonoBehaviour {
         return _enableCache[_enableCache.Count-1] as T ;
     }
 
-    public void Push(AbstractPart abstractPart) {
+    public void Push(Bomb abstractPart) {
         _enableCache.Remove(abstractPart);
         abstractPart.gameObject.SetActive(false);
         _disableCache.Add(abstractPart);
-    }*/
+    }
 }

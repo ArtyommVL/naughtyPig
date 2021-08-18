@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Dog : AbstractEnemy {
+public class Farmer : AbstractEnemy{
     // Public
     public override bool CanDamage() {
         return IsAlive;

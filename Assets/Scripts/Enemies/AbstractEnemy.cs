@@ -11,16 +11,18 @@ public abstract class AbstractEnemy : MonoBehaviour {
     [SerializeField] private List<Sprite> enemySpritesChase = default;
     [SerializeField] private List<Sprite> enemySpritesDirty = default;
 
-    private int _waypointIndex = 0;
-    private int _enemyHealthPoint;
-    private float _wayPointAngle;
-    private float _pigAngle;
-    private float _timer;
     private SpriteRenderer _enemyRenderer;
     private Pig _pig;
     private AILerp _aiLerp;
     private AIDestinationSetter _aiDestinationSetter;
     
+    private int _waypointIndex = 0;
+    private int _enemyHealthPoint;
+    private float _wayPointAngle;
+    private float _pigAngle;
+    private float _timer;
+    private Vector3 _startPosition;
+
     private bool _isChase;
     private bool _isPatrol;
     private bool _isDirty;
@@ -32,9 +34,11 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
     // Lifecycles
     protected virtual void Awake() {
+        _startPosition = gameObject.transform.position;
         _enemyRenderer = gameObject.GetComponent<SpriteRenderer>();
         _aiLerp = GetComponent<AILerp>();
         _aiDestinationSetter = gameObject.GetComponent<AIDestinationSetter>();
+        _aiLerp.canMove = false;
         _enemyHealthPoint = gameSettings.EnemyHealth;
         _timer = 0;
         _isPatrol = true;
@@ -72,9 +76,19 @@ public abstract class AbstractEnemy : MonoBehaviour {
         }
     }
 
+    protected void OnEnable() {
+        Pig.OnDie += Pig_OnDie;
+        UIScreenStart.OnStart += UIScreenStart_OnStart;
+    }
+
+    protected void OnDisable() {
+        Pig.OnDie -= Pig_OnDie;
+        UIScreenStart.OnStart += UIScreenStart_OnStart;
+    }
+
     protected virtual void EnemyChase() {
         if (Vector2.Distance(transform.position, _pig.transform.position) < gameSettings.StartChasingRadius) { 
-            EnemyTarget();
+            _aiDestinationSetter.target = _pig.transform;
         }else { 
             _isChase = false; 
             _isPatrol = true;
@@ -170,12 +184,9 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
     protected virtual void EnemyDeath() {
         if (_enemyHealthPoint <= 0) {
+            gameObject.transform.position = _startPosition;
             gameObject.SetActive(false);
         }
-    }
-
-    protected virtual void EnemyTarget() {
-        _aiDestinationSetter.target = _pig.transform;
     }
     
     public virtual void EnemyDamage() {
@@ -184,5 +195,16 @@ public abstract class AbstractEnemy : MonoBehaviour {
         _isDirty = true;
     }
 
-    public abstract bool CanDamage();    
+    public abstract bool CanDamage(); 
+    
+    // Private
+    private void Pig_OnDie() {
+        _aiLerp.canMove = false;
+    }
+    
+    private void UIScreenStart_OnStart() {
+        _isChase = false;
+        _isPatrol = true;
+        _aiLerp.canMove = true;
+    }
 }

@@ -2,12 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pig : MonoBehaviour {
+    // Event
+    public static event System.Action OnDie;
+    
     // Variables
     [SerializeField] private GameSettings gameSettings = default;
     [SerializeField] private Transform pigTransform = default;
     [SerializeField] private List<GameObject> pigsImages = default;
 
     private int _pigHp;
+    private Vector3 _startPosition;
     private Vector3 _pigPosition;
     private bool _isRight;
     private bool _isLeft;
@@ -21,7 +25,9 @@ public class Pig : MonoBehaviour {
     // Lifecycles
     private void Awake() {
         _pigHp = gameSettings.PigHealth;
-        _pigPosition = pigTransform.position;
+        var pigPosition = pigTransform.position;
+        _startPosition = pigPosition;
+        _pigPosition = pigPosition;
         ActivateImage(0);
     }
 
@@ -51,6 +57,8 @@ public class Pig : MonoBehaviour {
     }
 
     private void OnEnable() {
+        UIScreenStart.OnStart += UIScreenStart_OnStart; 
+        
         UIScreenHud.OnRightButtonDown += GameScreen_OnRightButtonDown;
         UIScreenHud.OnLeftButtonDown += GameScreen_OnLeftButtonDown;
         UIScreenHud.OnUpButtonDown += GameScreen_OnUpButtonDown;
@@ -63,6 +71,8 @@ public class Pig : MonoBehaviour {
     }
     
     private void OnDisable() {
+        UIScreenStart.OnStart -= UIScreenStart_OnStart; 
+
         UIScreenHud.OnRightButtonDown -= GameScreen_OnRightButtonDown;
         UIScreenHud.OnLeftButtonDown -= GameScreen_OnLeftButtonDown;
         UIScreenHud.OnUpButtonDown -= GameScreen_OnUpButtonDown;
@@ -80,6 +90,10 @@ public class Pig : MonoBehaviour {
     }
 
     // Private
+    private void UIScreenStart_OnStart() {
+        pigTransform.position = _startPosition;
+    }
+    
     private void GameScreen_OnRightButtonDown() {
         _isRight = true;
         ActivateImage(0);
@@ -119,7 +133,13 @@ public class Pig : MonoBehaviour {
     // Handlers
     private void PigDeath() {
         if (_pigHp <= 0) {
-            gameObject.SetActive(false);
+            OnDie?.Invoke();
+            _pigHp = gameSettings.PigHealth;
+            _isRight = false;
+            _isLeft = false;
+            _isUp = false;
+            _isDown = false;
+            UIScreenManager.Instance.ShowScreen<UIScreenGameOver>();
         }
     }
     

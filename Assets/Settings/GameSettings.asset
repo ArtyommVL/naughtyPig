@@ -16,7 +16,7 @@ MonoBehaviour:
   pigSpeed: 0.1
   enemyHealth: 200
   enemyDamage: 50
-  startChasingRadius: 4
+  startChasingRadius: 5
   dirtyTime: 3
   bombDamage: 100
   pushTime: 2

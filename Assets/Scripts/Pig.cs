@@ -59,29 +59,29 @@ public class Pig : MonoBehaviour {
     private void OnEnable() {
         UIScreenStart.OnStart += UIScreenStart_OnStart; 
         
-        UIScreenHud.OnRightButtonDown += GameScreen_OnRightButtonDown;
-        UIScreenHud.OnLeftButtonDown += GameScreen_OnLeftButtonDown;
-        UIScreenHud.OnUpButtonDown += GameScreen_OnUpButtonDown;
-        UIScreenHud.OnDownButtonDown += GameScreen_OnDownButtonDown;
+        UIScreenHud.OnRightButtonDown += UIScreenHud_OnRightButtonDown;
+        UIScreenHud.OnLeftButtonDown += UIScreenHud_OnLeftButtonDown;
+        UIScreenHud.OnUpButtonDown += UIScreenHud_OnUpButtonDown;
+        UIScreenHud.OnDownButtonDown += UIScreenHud_OnDownButtonDown;
 
-        UIScreenHud.OnRightButtonUp += GameScreen_OnRightButtonUp;
-        UIScreenHud.OnLeftButtonUp += GameScreen_OnLeftButtonUp;
-        UIScreenHud.OnUpButtonUp += GameScreen_OnUpButtonUp;
-        UIScreenHud.OnDownButtonUp += GameScreen_OnDownButtonUp;
+        UIScreenHud.OnRightButtonUp += UIScreenHud_OnRightButtonUp;
+        UIScreenHud.OnLeftButtonUp += UIScreenHud_OnLeftButtonUp;
+        UIScreenHud.OnUpButtonUp += UIScreenHud_OnUpButtonUp;
+        UIScreenHud.OnDownButtonUp += UIScreenHud_OnDownButtonUp;
     }
     
     private void OnDisable() {
         UIScreenStart.OnStart -= UIScreenStart_OnStart; 
 
-        UIScreenHud.OnRightButtonDown -= GameScreen_OnRightButtonDown;
-        UIScreenHud.OnLeftButtonDown -= GameScreen_OnLeftButtonDown;
-        UIScreenHud.OnUpButtonDown -= GameScreen_OnUpButtonDown;
-        UIScreenHud.OnDownButtonDown -= GameScreen_OnDownButtonDown;
+        UIScreenHud.OnRightButtonDown -= UIScreenHud_OnRightButtonDown;
+        UIScreenHud.OnLeftButtonDown -= UIScreenHud_OnLeftButtonDown;
+        UIScreenHud.OnUpButtonDown -= UIScreenHud_OnUpButtonDown;
+        UIScreenHud.OnDownButtonDown -= UIScreenHud_OnDownButtonDown;
         
-        UIScreenHud.OnRightButtonUp -= GameScreen_OnRightButtonUp;
-        UIScreenHud.OnLeftButtonUp -= GameScreen_OnLeftButtonUp;
-        UIScreenHud.OnUpButtonUp -= GameScreen_OnUpButtonUp;
-        UIScreenHud.OnDownButtonUp -= GameScreen_OnDownButtonUp;
+        UIScreenHud.OnRightButtonUp -= UIScreenHud_OnRightButtonUp;
+        UIScreenHud.OnLeftButtonUp -= UIScreenHud_OnLeftButtonUp;
+        UIScreenHud.OnUpButtonUp -= UIScreenHud_OnUpButtonUp;
+        UIScreenHud.OnDownButtonUp -= UIScreenHud_OnDownButtonUp;
     }
     
     // Public
@@ -91,42 +91,43 @@ public class Pig : MonoBehaviour {
 
     // Private
     private void UIScreenStart_OnStart() {
+        _pigHp = gameSettings.PigHealth;
         pigTransform.position = _startPosition;
     }
     
-    private void GameScreen_OnRightButtonDown() {
+    private void UIScreenHud_OnRightButtonDown() {
         _isRight = true;
         ActivateImage(0);
     }
 
-    private void GameScreen_OnLeftButtonDown() {
+    private void UIScreenHud_OnLeftButtonDown() {
         _isLeft = true;
         ActivateImage(1);
     }
 
-    private void GameScreen_OnUpButtonDown() {
+    private void UIScreenHud_OnUpButtonDown() {
         _isUp = true;
         ActivateImage(2);
     }
 
-    private void GameScreen_OnDownButtonDown() {
+    private void UIScreenHud_OnDownButtonDown() {
         _isDown = true;
         ActivateImage(3);
     }
     
-    private void GameScreen_OnRightButtonUp() {
+    private void UIScreenHud_OnRightButtonUp() {
         _isRight = false;
     }
     
-    private void GameScreen_OnLeftButtonUp() {
+    private void UIScreenHud_OnLeftButtonUp() {
         _isLeft = false;
     }
     
-    private void GameScreen_OnUpButtonUp() {
+    private void UIScreenHud_OnUpButtonUp() {
         _isUp = false;
     }
     
-    private void GameScreen_OnDownButtonUp() {
+    private void UIScreenHud_OnDownButtonUp() {
         _isDown = false;
     }
 
@@ -135,11 +136,11 @@ public class Pig : MonoBehaviour {
         if (_pigHp <= 0) {
             OnDie?.Invoke();
             pigTransform.position = _startPosition;
-            _pigHp = gameSettings.PigHealth;
             _isRight = false;
             _isLeft = false;
             _isUp = false;
             _isDown = false;
+            _pigHp = gameSettings.PigHealth;
             UIScreenManager.Instance.ShowScreen<UIScreenGameOver>();
         }
     }

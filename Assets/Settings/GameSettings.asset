@@ -18,6 +18,6 @@ MonoBehaviour:
   enemyDamage: 50
   startChasingRadius: 5
   dirtyTime: 3
-  bombDamage: 100
+  bombDamage: 1000
   pushTime: 2
-  attackTime: 3
+  attackTime: 2

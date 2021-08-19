@@ -23,22 +23,33 @@ public class EnemyManager : MonoBehaviour {
     }
 
     private void OnEnable() {
-        UIScreenStart.OnStart += UIScreenStart_OnStart;
         UIScreenHud.OnBombButtonClick += UIScreenHud_OnBombButtonClick;
+        UIScreenGameOver.OnRetry += UIScreenGameOver_OnRetry;
+        UIScreenWin.OnWin += UIScreenWin_OnWin;
     }
 
     private void OnDisable() {
-        UIScreenStart.OnStart -= UIScreenStart_OnStart;
         UIScreenHud.OnBombButtonClick -= UIScreenHud_OnBombButtonClick;
+        UIScreenGameOver.OnRetry -= UIScreenGameOver_OnRetry;
+        UIScreenWin.OnWin -= UIScreenWin_OnWin;
     }
     
     // Private
-    private void UIScreenStart_OnStart() {
-        dog.gameObject.SetActive(true);
-        farmer.gameObject.SetActive(true);
-    }
-
     private void UIScreenHud_OnBombButtonClick() {
         _isShowScreen = true;
+    }
+
+    private void UIScreenGameOver_OnRetry() {
+        ActivateObjects();
+    }
+
+    private void UIScreenWin_OnWin() {
+        ActivateObjects();
+    }
+    
+    // Handlers
+    private void ActivateObjects(){
+        dog.gameObject.SetActive(true);
+        farmer.gameObject.SetActive(true);
     }
 }

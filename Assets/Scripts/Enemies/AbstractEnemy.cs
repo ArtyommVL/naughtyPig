@@ -175,9 +175,9 @@ public abstract class AbstractEnemy : MonoBehaviour {
     }
 
     protected virtual void CustomTimer() {
+        EnemyDeath();
         _timer += Time.deltaTime;
         if (_timer >= gameSettings.DirtyTime) {
-            EnemyDeath();
             _aiLerp.canMove = true;
             _isDirty = false;
             _timer = 0;
@@ -186,6 +186,9 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
     protected virtual void EnemyDeath() {
         if (_enemyHealthPoint <= 0) {
+            _enemyHealthPoint = gameSettings.EnemyHealth;
+            _aiLerp.canMove = false;
+            _isDirty = false;
             _isAlive = false;
             gameObject.transform.position = _startPosition;
             gameObject.SetActive(false);

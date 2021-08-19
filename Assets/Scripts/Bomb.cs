@@ -53,7 +53,6 @@ public class Bomb : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.TryGetComponent<AbstractEnemy>(out var abstractEnemy)) {
             if (abstractEnemy.CanDamage()) {
-                
                 abstractEnemy.EnemyDamage();
             }
         }
@@ -65,6 +64,9 @@ public class Bomb : MonoBehaviour {
     
     // Private
     private void UIScreenGameOver_OnRetry() {
+        _isTimer = false; 
+        _timer = 0;
+        _lifecycleTimer = 0;
         GlobalPool.Instance.Push(this);
     }
     

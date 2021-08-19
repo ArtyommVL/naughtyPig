@@ -1,6 +1,9 @@
 using UnityEngine;
 
 public class BombGenerator : MonoBehaviour {
+    // Event
+    public static event System.Action OnPop;
+    
     // Variables
     [SerializeField] private Transform pig = default;
     
@@ -21,5 +24,6 @@ public class BombGenerator : MonoBehaviour {
     // Handlers
     private void PopBomb() {
         GlobalPool.Instance.Pop<Bomb>().transform.position = pig.transform.position;
+        OnPop?.Invoke();
     }
 }

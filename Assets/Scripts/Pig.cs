@@ -134,6 +134,7 @@ public class Pig : MonoBehaviour {
     private void PigDeath() {
         if (_pigHp <= 0) {
             OnDie?.Invoke();
+            pigTransform.position = _startPosition;
             _pigHp = gameSettings.PigHealth;
             _isRight = false;
             _isLeft = false;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,18 +40,20 @@ public class Bomb : MonoBehaviour {
         } 
     }
 
-    private void OnEnable() {
-        UIScreenHud.OnBombButtonClick += UIScreenHud_OnBombButtonClick;
+    private void OnEnable() { 
+        UIScreenGameOver.OnRetry += UIScreenGameOver_OnRetry;
+        BombGenerator.OnPop += BombGenerator_OnPop;
     }
 
     private void OnDisable() {
-        UIScreenHud.OnBombButtonClick += UIScreenHud_OnBombButtonClick;
+        UIScreenGameOver.OnRetry -= UIScreenGameOver_OnRetry;
+        BombGenerator.OnPop -= BombGenerator_OnPop;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.TryGetComponent<AbstractEnemy>(out var abstractEnemy)) {
             if (abstractEnemy.CanDamage()) {
-                _isTimer = true;
+                
                 abstractEnemy.EnemyDamage();
             }
         }
@@ -63,7 +64,11 @@ public class Bomb : MonoBehaviour {
     }
     
     // Private
-    private void UIScreenHud_OnBombButtonClick() {
+    private void UIScreenGameOver_OnRetry() {
+        GlobalPool.Instance.Push(this);
+    }
+    
+    private void BombGenerator_OnPop() {
         _isTimer = true;
     }
 }

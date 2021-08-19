@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UIScreenGameOver : AbstractScreen{
     // Event
-    public event System.Action OnRetry;
+    public static event System.Action OnRetry;
     
     // Variables
     [SerializeField] private UIButton retryButton = default;

@@ -76,14 +76,16 @@ public abstract class AbstractEnemy : MonoBehaviour {
         }
     }
 
-    protected void OnEnable() {
+    protected virtual void OnEnable() {
         Pig.OnDie += Pig_OnDie;
         UIScreenStart.OnStart += UIScreenStart_OnStart;
+        UIScreenHud.OnBombButtonClick += UIScreenHud_OnBombButtonClick;
     }
 
-    protected void OnDisable() {
+    protected virtual void OnDisable() {
         Pig.OnDie -= Pig_OnDie;
-        UIScreenStart.OnStart += UIScreenStart_OnStart;
+        UIScreenStart.OnStart -= UIScreenStart_OnStart;
+        UIScreenHud.OnBombButtonClick -= UIScreenHud_OnBombButtonClick;
     }
 
     protected virtual void EnemyChase() {
@@ -184,6 +186,7 @@ public abstract class AbstractEnemy : MonoBehaviour {
 
     protected virtual void EnemyDeath() {
         if (_enemyHealthPoint <= 0) {
+            _isAlive = false;
             gameObject.transform.position = _startPosition;
             gameObject.SetActive(false);
         }
@@ -199,12 +202,19 @@ public abstract class AbstractEnemy : MonoBehaviour {
     
     // Private
     private void Pig_OnDie() {
+        gameObject.transform.position = _startPosition;
         _aiLerp.canMove = false;
     }
     
     private void UIScreenStart_OnStart() {
+        _enemyHealthPoint = gameSettings.EnemyHealth;
+        _isAlive = true;
         _isChase = false;
         _isPatrol = true;
         _aiLerp.canMove = true;
+    }
+
+    private void UIScreenHud_OnBombButtonClick() {
+        _isAlive = true;
     }
 }

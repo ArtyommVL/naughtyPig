@@ -29,12 +29,15 @@ public class Bomb : MonoBehaviour {
                 bombsSprites[1].SetActive(true);
                 _timer += Time.deltaTime;
                 if (_timer >= gameSettings.PushTime) {
+                    _bombCollider.enabled = false;
                     bombsSprites[0].SetActive(true);
                     bombsSprites[1].SetActive(false);
                     _lifecycleTimer = 0;
                     _timer = 0;
-                    GlobalPool.Instance.Push(this);
                     _isTimer = false;
+                    if (_bombCollider.enabled == false) {
+                        GlobalPool.Instance.Push(this);
+                    }
                 }
             }
         } 
@@ -42,11 +45,13 @@ public class Bomb : MonoBehaviour {
 
     private void OnEnable() { 
         UIScreenGameOver.OnRetry += UIScreenGameOver_OnRetry;
+        UIScreenWin.OnWin += UIScreenWin_OnWin;
         BombGenerator.OnPop += BombGenerator_OnPop;
     }
 
     private void OnDisable() {
         UIScreenGameOver.OnRetry -= UIScreenGameOver_OnRetry;
+        UIScreenWin.OnWin += UIScreenWin_OnWin;
         BombGenerator.OnPop -= BombGenerator_OnPop;
     }
 
@@ -64,13 +69,27 @@ public class Bomb : MonoBehaviour {
     
     // Private
     private void UIScreenGameOver_OnRetry() {
-        _isTimer = false; 
-        _timer = 0;
-        _lifecycleTimer = 0;
-        GlobalPool.Instance.Push(this);
+        DefaultVariables();
+    }
+
+    private void UIScreenWin_OnWin() {
+        DefaultVariables();
     }
     
     private void BombGenerator_OnPop() {
         _isTimer = true;
+    }
+    
+    // Handlers
+    private void DefaultVariables() {
+        bombsSprites[0].SetActive(true);
+        bombsSprites[1].SetActive(false);
+        _isTimer = false;
+        _timer = 0;
+        _lifecycleTimer = 0;
+        _bombCollider.enabled = false;
+        if (_bombCollider.enabled == false) {
+            GlobalPool.Instance.Push(this);
+        }
     }
 }

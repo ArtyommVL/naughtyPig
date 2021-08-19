@@ -175,10 +175,9 @@ public abstract class AbstractEnemy : MonoBehaviour {
     }
 
     protected virtual void CustomTimer() {
-        EnemyDeath();
         _timer += Time.deltaTime;
         if (_timer >= gameSettings.DirtyTime) {
-            _aiLerp.canMove = true;
+            EnemyDeath();
             _isDirty = false;
             _timer = 0;
         }

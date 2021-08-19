@@ -11,8 +11,10 @@ public class Pig : MonoBehaviour {
     [SerializeField] private List<GameObject> pigsImages = default;
 
     private int _pigHp;
+    private float _pigSpeed;
     private Vector3 _startPosition;
     private Vector3 _pigPosition;
+    
     private bool _isRight;
     private bool _isLeft;
     private bool _isUp;
@@ -25,6 +27,7 @@ public class Pig : MonoBehaviour {
     // Lifecycles
     private void Awake() {
         _pigHp = gameSettings.PigHealth;
+        _pigSpeed = gameSettings.PigSpeed;
         var pigPosition = pigTransform.position;
         _startPosition = pigPosition;
         _pigPosition = pigPosition;
@@ -68,6 +71,8 @@ public class Pig : MonoBehaviour {
         UIScreenHud.OnLeftButtonUp += UIScreenHud_OnLeftButtonUp;
         UIScreenHud.OnUpButtonUp += UIScreenHud_OnUpButtonUp;
         UIScreenHud.OnDownButtonUp += UIScreenHud_OnDownButtonUp;
+
+        UIScreenWin.OnWin += UIScreenWin_OnWin;
     }
     
     private void OnDisable() {
@@ -82,6 +87,8 @@ public class Pig : MonoBehaviour {
         UIScreenHud.OnLeftButtonUp -= UIScreenHud_OnLeftButtonUp;
         UIScreenHud.OnUpButtonUp -= UIScreenHud_OnUpButtonUp;
         UIScreenHud.OnDownButtonUp -= UIScreenHud_OnDownButtonUp;
+        
+        UIScreenWin.OnWin += UIScreenWin_OnWin;
     }
     
     // Public
@@ -92,6 +99,7 @@ public class Pig : MonoBehaviour {
     // Private
     private void UIScreenStart_OnStart() {
         _pigHp = gameSettings.PigHealth;
+        _pigSpeed = gameSettings.PigSpeed;
         pigTransform.position = _startPosition;
     }
     
@@ -131,6 +139,15 @@ public class Pig : MonoBehaviour {
         _isDown = false;
     }
 
+    private void UIScreenWin_OnWin() {
+        pigTransform.position = _startPosition;
+        _isRight = false;
+        _isLeft = false;
+        _isUp = false;
+        _isDown = false;
+        _pigHp = gameSettings.PigHealth;
+    }
+
     // Handlers
     private void PigDeath() {
         if (_pigHp <= 0) {
@@ -146,7 +163,7 @@ public class Pig : MonoBehaviour {
     }
     
     private void PigMoving(Vector3 direction) {
-        pigTransform.position += direction*gameSettings.PigSpeed;
+        pigTransform.position += direction*_pigSpeed;
         pigTransform.rotation = Quaternion.identity;
         _pigPosition = pigTransform.position;
     }
